@@ -11,22 +11,32 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-// Zaregistrujeme vlastní prvek po inicializaci Bricks
-add_action( 'bricks/element/register', function() {
+// Najdříve počkáme na init, aby Bricks byl už načtený
+add_action( 'init', function() {
+    // Pokud Bricks není aktivní, nic neregistrujeme
+    if ( ! class_exists( '\Bricks\Elements' ) ) {
+        error_log( 'Bricks není aktivní – prvek MojeVARY Mapa se neregistruje.' );
+        return;
+    }
 
-    // Parametry prvku
-    $settings = [
-        'key'         => 'mvm-mapa',            // unikátní ID prvku
-        'name'        => 'mvm-mapa',            // volný název (bez diakritiky)
-        'title'       => 'MojeVARY Mapa',       // text, který se zobrazí v editoru
-        'category'    => 'basic',               // kategorie, např. basic, custom, layout apod.
-        'icon'        => 'map-pin',             // ikona z Bricks knihovny ikon
-        'params'      => [],                    // zatím prázdné, nebudeme mít žádné nastavení
-    ];
+    // Teď registrujeme vlastní prvek při hooksu bricks/element/register
+    add_action( 'bricks/element/register', function() {
+        error_log( 'Registruji prvek MojeVARY Mapa' );
 
-    \Bricks\Elements::register( $settings, function() {
-        // Tělo renderování prvku (frontend)
-        // Zatím necháváme prvek prázdný – nemusí vracet nic
-        echo '<div class="mvm-mapa-placeholder"></div>';
+        $settings = [
+            'key'      => 'mvm-mapa',          // unikátní ID prvku
+            'name'     => 'mvm-mapa',          // interní jméno (bez diakritiky)
+            'title'    => 'MojeVARY Mapa',     // název, který se zobrazí v editoru
+            'category' => 'custom',            // např. basic, custom, layout atd.
+            'icon'     => 'map-pin',           // ikona z Bricks knihovny
+            'params'   => [],                  // zatím bez nastavení
+        ];
+
+        \Bricks\Elements::register( $settings, function() {
+            // Jednoduchý placeholder pro element
+            echo '<div class="mvm-mapa-placeholder" style="border:1px dashed #999;padding:10px;text-align:center;">';
+            echo 'MojeVARY Mapa (prázdný prvek)';
+            echo '</div>';
+        } );
     } );
 } );

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: MojeVARY Mapa
  * Description: Prázdný (dummy) prvek pro Bricks Builder pod názvem "MojeVARY Mapa".
- * Version:     0.1.1
+ * Version:     0.1.2
  * Author:      Mikoláš Hodan
  */
 
